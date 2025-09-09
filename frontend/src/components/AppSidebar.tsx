@@ -1,15 +1,11 @@
 import {
   DropletIcon,
-  TrendingUpIcon,
-  GraduationCapIcon,
-  HeartPulseIcon,
-  BriefcaseIcon,
   LeafIcon,
   LayoutDashboardIcon,
-  BellIcon,
-  School,
-  LandPlot,
   LandPlotIcon,
+  Bot,
+  Sprout,
+  CloudSun,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -22,54 +18,29 @@ const sidebarItems = [
     icon: LayoutDashboardIcon,
   },
   {
+    title: "Crop Health",
+    path: "/dashboard/crop-health",
+    icon: Sprout,
+  },
+  {
+    title: "Soil Quality",
+    path: "/dashboard/soil",
+    icon: LandPlotIcon,
+  },
+  {
     title: "Water Quality",
     path: "/dashboard/water",
     icon: DropletIcon,
   },
   {
-    title: "Soil",
-    path: "/dashboard/soil",
-    icon: LandPlotIcon,
+    title: "Weather",
+    path: "/dashboard/weather",
+    icon: CloudSun,
   },
   {
-    title: "Market Links",
-    path: "/dashboard/market",
-    icon: TrendingUpIcon,
-  },
-  {
-    title: "Education",
-    path: "/dashboard/education",
-    icon: GraduationCapIcon,
-  },
-  {
-    title: "Healthcare",
-    path: "/dashboard/health",
-    icon: HeartPulseIcon,
-  },
-  {
-    title: "Employment",
-    path: "/dashboard/jobs",
-    icon: BriefcaseIcon,
-  },
-  // {
-  //   title: "Climate",
-  //   path: "/dashboard/climate",
-  //   icon: LeafIcon,
-  // },
-  {
-    title: "Gender Equality",
-    path: "/dashboard/gender",
-    icon: LayoutDashboardIcon,
-  },
-  {
-    title: "Updates",
-    path: "/dashboard/updates",
-    icon: BellIcon,
-  },
-  {
-    title: "Learning",
-    path: "/dashboard/course",
-    icon: School,
+    title: "AI Learning",
+    path: "/dashboard/learning",
+    icon: Bot,
   },
 ];
 
@@ -83,7 +54,8 @@ export function AppSidebar() {
           <Button
             key={item.title}
             className={`w-full justify-start mb-2 px-4 py-2 text-foreground hover:bg-primary-100 hover:text-primary-600 transition-colors duration-200 ${
-              location.pathname === item.path
+              (location.pathname === item.path || 
+               (item.path === "/dashboard" && location.pathname === "/dashboard/"))
                 ? "bg-primary-100 text-primary-600"
                 : "bg-transparent"
             }`}

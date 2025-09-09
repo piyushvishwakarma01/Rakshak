@@ -1,64 +1,129 @@
-# 🚀 GramRakshak
+# GramRakshak - Intelligent Agricultural Assistant
 
-## 📌 Problem Statement
-- **Clean Water:** Limited access to safe drinking water.
-- **Agriculture:** Unpredictable weather affecting crop yields.
-- **Education:** Lack of quality education for rural children.
-- **Healthcare:** Limited early disease detection and medical access.
-- **Resources:** Unsustainable natural resource management.
+GramRakshak is an intelligent, farmer-centric product designed to empower small-scale agricultural stakeholders with real-time, personalized crop disease detection and advisory services. By combining machine learning, data analytics, and user-friendly interfaces, the solution bridges the gap between traditional farming and modern technology.
 
-## 🎯 Proposed Solution
-An AI-driven platform integrating IoT sensors, machine learning, and cloud computing to:
-- Monitor water quality in real-time.
-- Predict crop health and optimize yields.
-- Provide AI-powered healthcare diagnostics.
-- Enable personalized learning through chatbots.
+## Key Features
 
-## 🏗️ Tech Stack
-- **IoT and Sensors:** pH, TDS, Turbidity, Soil Moisture Sensors, Arduino.
-- **AI and ML:** YOLOv8, Sentinel-2, Deep Learning, NLP (Chatbots via Gemini), Random Forest.
-- **Backend and Database:** Node.js, FastAPI, PostgreSQL, MongoDB.
-- **Frontend:** React.js, Tailwind CSS.
-- **Deployment:** AWS EC2, Vercel.
+### 1. Crop Disease Detection
+- **Early Disease Identification**: Detect plant diseases at early stages using advanced ML models
+- **Real-time Analysis**: Upload plant images for instant disease detection
+- **Detailed Reports**: Get comprehensive disease information and treatment recommendations
+- **Preventive Measures**: Receive guidance on disease prevention and management
 
-## 🔍 Use Cases
-- **Water Monitoring:** Real-time sensor data detects contamination.
-- **Crop Health:** AI forecasts pest infestations and yield.
-- **Healthcare:** Deep learning identifies early disease symptoms.
-- **Education:** AI chatbots provide personalized learning support.
+### 2. Soil Quality Analysis
+- **Soil Health Monitoring**: Track soil moisture, pH levels, and fertility
+- **Smart Recommendations**: Get crop-specific soil improvement suggestions
+- **Fertilizer Optimization**: Receive precise fertilizer recommendations
+- **Historical Analysis**: Track soil health trends over time
 
-## 🌟 Advantages
-- **Efficiency:** Optimized resource allocation & decision-making.
-- **Scalability:** Modular, adaptable system for different communities.
-- **Cost-Effective:** Reduces need for expensive infrastructure.
-- **Sustainability:** Supports responsible resource management.
-- **Inclusivity:** AI-driven accessibility for low-connectivity regions.
-- **Real-Time Insights:** Enables quick interventions and proactive solutions.
+### 3. Water Quality Management
+- **Water Quality Monitoring**: Track pH, turbidity, and temperature
+- **Irrigation Optimization**: Smart irrigation recommendations
+- **Water Conservation**: Efficient water usage suggestions
+- **Quality Alerts**: Get notified about water quality issues
 
-## 🔗 Getting Started
+### 4. Crop Advisory Services
+- **Crop Selection**: Get recommendations based on soil and climate conditions
+- **Growth Monitoring**: Track crop health and growth stages
+- **Pest Management**: Receive integrated pest management advice
+- **Harvest Planning**: Optimize harvest timing and methods
+
+## Technology Stack
+
+### Frontend
+- React with TypeScript
+- Tailwind CSS for styling
+- Shadcn UI components
+- Chart.js for data visualization
+
+### Backend
+- Django REST Framework
+- TensorFlow for ML models
+- PostgreSQL database
+- RESTful APIs
+
+### Machine Learning
+- Custom-trained models for disease detection
+- Soil quality prediction models
+- Water quality analysis algorithms
+- Crop recommendation systems
+
+## Getting Started
+
 ### Prerequisites
-- Node.js & FastAPI installed
-- PostgreSQL/MongoDB set up
-- AWS/GCP/Azure for cloud deployment
+- Node.js (v16 or higher)
+- Python (v3.8 or higher)
+- PostgreSQL
+- Git
 
 ### Installation
-```sh
-# Clone the repository
-git clone https://github.com/mukulpythondev/GramRakshak.git
-cd GramRakshak
 
-# Install dependencies
-npm install  # For frontend
-
-
-# Run the backend
-cd backend
-yarn install
-yarn dev
-
-# Run the frontend
-cd ../frontend
-npm start
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/gramrakshak.git
+cd gramrakshak
 ```
 
+2. Install frontend dependencies:
+```bash
+cd frontend
+npm install
+```
+
+3. Install backend dependencies:
+```bash
+cd ../backend
+pip install -r requirements.txt
+```
+
+4. Set up the database:
+```bash
+python manage.py migrate
+```
+
+5. Start the development servers:
+```bash
+# Frontend
+cd frontend
+npm run dev
+
+# Backend
+cd backend
+python manage.py runserver
+```
+
+## Project Structure
+
+```
+gramrakshak/
+├── frontend/                 # React frontend application
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/          # Page components
+│   │   ├── lib/            # Utility functions
+│   │   └── hooks/          # Custom React hooks
+│   └── public/             # Static assets
+│
+├── backend/                 # Django backend application
+│   ├── api/                # API endpoints
+│   ├── models/             # ML models
+│   ├── utils/              # Utility functions
+│   └── requirements.txt    # Python dependencies
+│
+└── README.md               # Project documentation
+```
+
+## Contributing
+
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Farmers and agricultural experts for their valuable insights
+- Open-source community for their contributions
+- Research institutions for their agricultural datasets
 

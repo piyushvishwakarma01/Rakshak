@@ -1,126 +1,145 @@
-import axios from 'axios';
-import SoilChart from "../../components/charts/SoilChart";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
-import { AlertTriangle, Droplet, Sprout, Wheat } from "lucide-react";
-import { useState } from 'react';
-import { useESPSensorData } from '../../hooks/useSensor';
-
-const config = {
-  moisture: { label: "Moisture Level", color: "#22c55e" },
-  ph: { label: "pH Level", color: "#f97316" },
-  fertility: { label: "TDS", color: "#8b5cf6" },
-};
+import { Leaf, Droplet, Thermometer, AlertCircle, Info } from "lucide-react";
 
 const SoilDashboard = () => {
-  const { sensorData, isLoading, error: sensorError } = useESPSensorData();
-  const [analysisResult, setAnalysisResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const analyzeSoil = async () => {
-    try {
-      axios.defaults.baseURL = 'http://localhost:8000';
-
-      const response = await axios.post('/predict', {
-        ph: sensorData?.ph || 0,
-        moisture: sensorData?.moisture || 0,
-        turbidity: sensorData?.tds || 0,
-        location: "India"
-      });
-
-      setAnalysisResult(response.data.soil_quality);
-      setError(null);
-    } catch (error) {
-      console.error("Error analyzing soil:", error);
-      setError("Failed to analyze soil quality. Please try again.");
-      setAnalysisResult(null);
-    }
-  };
-
   return (
-    <div className="space-y-8">
-      {/* Header */}
+    <div className="space-y-8 p-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Soil Quality Dashboard</h1>
-        <div className="flex items-center gap-2 text-yellow-600 bg-yellow-50 px-4 py-2 rounded-lg">
-          <AlertTriangle className="h-5 w-5" />
-          <span>1 Quality Alert</span>
+        <h1 className="text-3xl font-bold">Soil Quality Monitoring</h1>
+        <div className="flex items-center gap-2 text-primary bg-primary-50 px-4 py-2 rounded-lg">
+          <Leaf className="h-5 w-5" />
+          <span>Coming Soon</span>
         </div>
       </div>
 
-      {/* Key Indicators */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Moisture Level</CardTitle>
-            <Droplet className="h-4 w-4 text-primary" />
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Droplet className="h-5 w-5" />
+              Soil Moisture
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : `${sensorData?.moisture || "N/A"}%`}</div>
-            <p className="text-xs text-muted-foreground">Optimal range: 30-60%</p>
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold">Coming Soon</div>
+              <p className="text-sm text-gray-500 mt-2">Real-time soil moisture monitoring will be available soon</p>
+              <div className="mt-4 text-left text-sm text-gray-600">
+                <p className="font-medium">Features:</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Continuous moisture level tracking</li>
+                  <li>Smart irrigation recommendations</li>
+                  <li>Historical moisture data analysis</li>
+                  <li>Customizable moisture thresholds</li>
+                </ul>
+              </div>
+            </div>
           </CardContent>
         </Card>
+
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">pH Level</CardTitle>
-            <Sprout className="h-4 w-4 text-secondary" />
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Thermometer className="h-5 w-5" />
+              pH Level
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : sensorData?.ph || "N/A"}</div>
-            <p className="text-xs text-muted-foreground">Ideal range: 6.0-7.5</p>
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold">Coming Soon</div>
+              <p className="text-sm text-gray-500 mt-2">Soil pH monitoring will be available soon</p>
+              <div className="mt-4 text-left text-sm text-gray-600">
+                <p className="font-medium">Features:</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Real-time pH level monitoring</li>
+                  <li>pH trend analysis</li>
+                  <li>Soil amendment recommendations</li>
+                  <li>Optimal pH range alerts</li>
+                </ul>
+              </div>
+            </div>
           </CardContent>
         </Card>
+
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">TDS</CardTitle>
-            <Wheat className="h-4 w-4 text-accent" />
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Leaf className="h-5 w-5" />
+              Soil Fertility
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{isLoading ? "Loading..." : `${sensorData?.tds || "N/A"}`}</div>
-            <p className="text-xs text-muted-foreground">ppm</p>
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold">Coming Soon</div>
+              <p className="text-sm text-gray-500 mt-2">Soil fertility analysis will be available soon</p>
+              <div className="mt-4 text-left text-sm text-gray-600">
+                <p className="font-medium">Features:</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Nutrient level monitoring</li>
+                  <li>Fertilizer recommendations</li>
+                  <li>Soil health scoring</li>
+                  <li>Crop-specific fertility analysis</li>
+                </ul>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Analysis Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Soil Analysis</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <button
-            onClick={analyzeSoil}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-            disabled={isLoading}
-          >
-            {isLoading ? "Fetching Data..." : "Analyze Soil Quality"}
-          </button>
-          {analysisResult && (
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-              <p className="text-green-800">
-                <strong>Analysis Result:</strong> {analysisResult}
-              </p>
-            </div>
-          )}
-          {error && (
-            <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-              <p className="text-red-800">{error}</p>
-            </div>
-          )}
-          {sensorError && (
-            <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-              <p className="text-red-800">Sensor Data Error: {sensorError}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Soil Quality Trends Chart */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Soil Quality Trends</CardTitle>
+          <CardTitle>About Soil Monitoring</CardTitle>
         </CardHeader>
         <CardContent>
-          <SoilChart config={config} />
+          <div className="space-y-6">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-yellow-500 mt-1" />
+              <div>
+                <p className="font-medium">Feature Coming Soon</p>
+                <p className="text-sm text-gray-500">
+                  We are working on integrating IoT sensors for real-time soil monitoring. This will include:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                  <li>Real-time soil moisture monitoring</li>
+                  <li>pH level tracking</li>
+                  <li>Soil fertility analysis</li>
+                  <li>Automated irrigation recommendations</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <Info className="h-5 w-5 text-blue-500 mt-1" />
+              <div>
+                <p className="font-medium">Technology Stack</p>
+                <p className="text-sm text-gray-500">
+                  Our soil monitoring system will utilize:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                  <li>ESP8266 microcontrollers for data collection</li>
+                  <li>High-precision soil sensors</li>
+                  <li>Real-time data processing</li>
+                  <li>Cloud-based analytics</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <Info className="h-5 w-5 text-green-500 mt-1" />
+              <div>
+                <p className="font-medium">Benefits</p>
+                <p className="text-sm text-gray-500">
+                  The soil monitoring system will help farmers:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                  <li>Optimize water usage</li>
+                  <li>Improve crop yields</li>
+                  <li>Reduce fertilizer waste</li>
+                  <li>Make data-driven decisions</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

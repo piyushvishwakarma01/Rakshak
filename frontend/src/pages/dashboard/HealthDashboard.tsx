@@ -4,72 +4,93 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { Leaf, Upload, AlertCircle, Image as ImageIcon, Info } from "lucide-react";
 
 interface Prediction {
-  label: string;
-  score: number;
+  disease: string;
+  confidence: number;
+  description: string;
+  treatment: string;
+  prevention: string;
 }
 
 interface ApiResponse {
-  predictions: Prediction[];
+  predictions: Array<{
+    label: string;
+    score: number;
+  }>;
 }
 
 const DISEASE_INFO = {
-  'Tomato Bacterial Spot': {
-    description: 'Bacterial spot is a common disease of tomato caused by Xanthomonas bacteria.',
+  'Tomato_healthy': {
+    description: 'The tomato plant appears to be healthy with no signs of disease.',
+    treatment: 'Continue current care practices.',
+    prevention: 'Maintain proper watering, fertilization, and pest control.'
+  },
+  'Tomato_Bacterial_spot': {
+    description: 'Bacterial spot is caused by Xanthomonas bacteria, appearing as small, dark, water-soaked spots on leaves.',
     treatment: 'Use copper-based fungicides and practice crop rotation.',
     prevention: 'Use disease-free seeds and avoid overhead watering.'
   },
-  'Tomato Early Blight': {
-    description: 'Early blight is caused by the fungus Alternaria solani.',
+  'Tomato_Early_blight': {
+    description: 'Early blight is caused by the fungus Alternaria solani, showing as concentric rings on leaves.',
     treatment: 'Apply fungicides containing chlorothalonil or mancozeb.',
     prevention: 'Remove infected leaves and maintain proper plant spacing.'
   },
-  'Tomato Late Blight': {
-    description: 'Late blight is caused by the fungus-like organism Phytophthora infestans.',
+  'Tomato_Late_blight': {
+    description: 'Late blight is caused by Phytophthora infestans, showing as large, dark lesions on leaves and stems.',
     treatment: 'Apply fungicides containing chlorothalonil or copper.',
     prevention: 'Avoid overhead watering and ensure good air circulation.'
   },
-  'Tomato Leaf Mold': {
-    description: 'Leaf mold is caused by the fungus Passalora fulva.',
+  'Tomato_Leaf_Mold': {
+    description: 'Leaf mold is caused by the fungus Passalora fulva, appearing as yellow spots on upper leaf surfaces.',
     treatment: 'Apply fungicides containing chlorothalonil or mancozeb.',
     prevention: 'Maintain proper plant spacing and ventilation.'
   },
-  'Tomato Septoria Leaf Spot': {
-    description: 'Septoria leaf spot is caused by the fungus Septoria lycopersici.',
+  'Tomato_Septoria_leaf_spot': {
+    description: 'Septoria leaf spot is caused by Septoria lycopersici, showing as small, circular spots with dark margins.',
     treatment: 'Remove infected leaves and apply copper-based fungicides.',
     prevention: 'Avoid overhead watering and practice crop rotation.'
   },
-  'Tomato Spider Mites': {
-    description: 'Spider mites are tiny pests that feed on plant sap.',
+  'Tomato_Spider_mites': {
+    description: 'Spider mites are tiny pests that feed on plant sap, causing stippling and webbing on leaves.',
     treatment: 'Use miticides or insecticidal soap.',
     prevention: 'Maintain proper humidity and remove affected leaves.'
   },
-  'Tomato Target Spot': {
-    description: 'Target spot is caused by the fungus Corynespora cassiicola.',
+  'Tomato_Target_Spot': {
+    description: 'Target spot is caused by Corynespora cassiicola, showing as circular spots with concentric rings.',
     treatment: 'Apply fungicides containing chlorothalonil or mancozeb.',
     prevention: 'Remove infected leaves and maintain proper spacing.'
   },
-  'Tomato Yellow Leaf Curl Virus': {
-    description: 'A viral disease transmitted by whiteflies.',
-    treatment: 'Remove and destroy infected plants.',
-    prevention: 'Control whitefly populations and use resistant varieties.'
-  },
-  'Tomato Mosaic Virus': {
-    description: 'A viral disease that affects tomato plants.',
+  'Tomato_mosaic_virus': {
+    description: 'A viral disease causing mottled leaves and stunted growth.',
     treatment: 'Remove and destroy infected plants.',
     prevention: 'Use disease-free seeds and control aphid populations.'
   },
-  'Potato Early Blight': {
-    description: 'Early blight is caused by the fungus Alternaria solani.',
+  'Tomato_YellowLeaf_Curl_Virus': {
+    description: 'A viral disease transmitted by whiteflies, causing yellowing and curling of leaves.',
+    treatment: 'Remove and destroy infected plants.',
+    prevention: 'Control whitefly populations and use resistant varieties.'
+  },
+  'Potato_healthy': {
+    description: 'The potato plant appears to be healthy with no signs of disease.',
+    treatment: 'Continue current care practices.',
+    prevention: 'Maintain proper soil conditions and pest control.'
+  },
+  'Potato_Early_blight': {
+    description: 'Early blight is caused by Alternaria solani, showing as dark spots with concentric rings.',
     treatment: 'Apply fungicides containing chlorothalonil or mancozeb.',
     prevention: 'Practice crop rotation and remove infected leaves.'
   },
-  'Potato Late Blight': {
-    description: 'Late blight is caused by Phytophthora infestans.',
+  'Potato_Late_blight': {
+    description: 'Late blight is caused by Phytophthora infestans, showing as dark lesions on leaves and stems.',
     treatment: 'Apply fungicides containing chlorothalonil or copper.',
     prevention: 'Use certified disease-free seed potatoes.'
   },
-  'Pepper Bell Bacterial Spot': {
-    description: 'Bacterial spot is caused by Xanthomonas bacteria.',
+  'Pepper_bell_healthy': {
+    description: 'The bell pepper plant appears to be healthy with no signs of disease.',
+    treatment: 'Continue current care practices.',
+    prevention: 'Maintain proper watering and fertilization.'
+  },
+  'Pepper_bell_Bacterial_spot': {
+    description: 'Bacterial spot is caused by Xanthomonas bacteria, appearing as small, dark spots on leaves.',
     treatment: 'Use copper-based fungicides.',
     prevention: 'Use disease-free seeds and avoid overhead watering.'
   }
@@ -85,6 +106,19 @@ const HealthDashboard = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      
+      // Validate image size
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        setError("Image size should be less than 5MB");
+        return;
+      }
+
+      // Validate image type
+      if (!file.type.startsWith('image/')) {
+        setError("Please upload an image file");
+        return;
+      }
+
       setSelectedImage(file);
       setPrediction(null);
       setError(null);
@@ -106,35 +140,72 @@ const HealthDashboard = () => {
     formData.append("file", selectedImage);
 
     try {
-      const response = await axios.post<ApiResponse>("http://localhost:8001/predict/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      console.log("Sending image for analysis...");
+      const response = await axios.post<ApiResponse>(
+        "http://localhost:8001/predict/",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       
-      if (response.data.predictions && response.data.predictions.length > 0) {
-        const bestPrediction = response.data.predictions[0];
-        setPrediction(bestPrediction);
-        if (bestPrediction.score <= 0.8) {
-          setError("Low confidence in prediction. Please try another image or consult an expert.");
+      console.log("API Response:", response.data);
+      
+      if (response.data && response.data.predictions && response.data.predictions.length > 0) {
+        const prediction = response.data.predictions[0];
+        const diseaseInfo = DISEASE_INFO[prediction.label as keyof typeof DISEASE_INFO] || {
+          description: `Analysis complete for ${prediction.label}.`,
+          treatment: 'Follow standard treatment practices.',
+          prevention: 'Maintain proper plant care and monitoring.'
+        };
+        
+        const predictionData: Prediction = {
+          disease: prediction.label,
+          confidence: prediction.score,
+          description: diseaseInfo.description,
+          treatment: diseaseInfo.treatment,
+          prevention: diseaseInfo.prevention
+        };
+        
+        setPrediction(predictionData);
+        
+        if (prediction.score < 0.5) {
+          setError("Low confidence in prediction. Please ensure the image is clear and well-lit.");
         }
       } else {
-        setError("No prediction returned from the server.");
+        const errorMessage = "Invalid response from server. Please try again.";
+        console.error("Invalid response structure:", response.data);
+        setError(errorMessage);
       }
     } catch (error: any) {
       console.error("Error uploading image:", error);
-      setError(error.response?.data?.error || "Failed to analyze image. Please try again.");
+      
+      let errorMessage = "Failed to analyze image. Please try again.";
+      
+      if (error.response) {
+        // Server responded with an error
+        console.error("Server error response:", error.response.data);
+        errorMessage = error.response.data.error || error.response.data.message || errorMessage;
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("No response received:", error.request);
+        errorMessage = "No response from server. Please check if the server is running.";
+      } else {
+        // Something happened in setting up the request
+        console.error("Request setup error:", error.message);
+        errorMessage = error.message || errorMessage;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const getDiseaseInfo = (diseaseName: string) => {
-    return DISEASE_INFO[diseaseName as keyof typeof DISEASE_INFO] || null;
-  };
-
   return (
     <div className="space-y-8 p-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Plant Disease Detection</h1>
+        <h1 className="text-3xl font-bold">Crop Disease Detection</h1>
         <div className="flex items-center gap-2 text-primary bg-primary-50 px-4 py-2 rounded-lg">
           <Leaf className="h-5 w-5" />
           <span>Plant Health Analysis</span>
@@ -142,7 +213,7 @@ const HealthDashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Image Upload and Preview Section */}
+        {/* Image Upload Section */}
         <Card>
           <CardHeader>
             <CardTitle>Upload Plant Image</CardTitle>
@@ -150,7 +221,13 @@ const HealthDashboard = () => {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <p className="text-sm text-gray-500">
-                Upload an image of a plant leaf to detect diseases. Supported plants: Tomato, Potato, and Bell Pepper.
+                Upload a clear, well-lit image of a plant leaf to detect diseases. For best results:
+                <ul className="list-disc list-inside mt-2">
+                  <li>Ensure good lighting</li>
+                  <li>Focus on the affected area</li>
+                  <li>Avoid blurry images</li>
+                  <li>Image size should be less than 5MB</li>
+                </ul>
               </p>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                 {imagePreview ? (
@@ -199,87 +276,69 @@ const HealthDashboard = () => {
               className="w-full bg-green-500 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 hover:bg-green-600 transition-colors"
               disabled={!selectedImage || loading}
             >
-              <Upload className="h-5 w-5" /> {loading ? "Analyzing..." : "Upload & Analyze"}
+              {loading ? (
+                <>
+                  <AlertCircle className="h-5 w-5 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-5 w-5" />
+                  Analyze Image
+                </>
+              )}
             </button>
+            {error && (
+              <div className="text-red-500 text-sm flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                {error}
+              </div>
+            )}
           </CardContent>
         </Card>
 
         {/* Results Section */}
-        <div className="space-y-6">
-          {error && (
-            <div className="flex items-center gap-2 text-red-500 bg-red-50 p-4 rounded-lg">
-              <AlertCircle className="h-5 w-5" />
-              <p>{error}</p>
-            </div>
-          )}
+        {prediction && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Analysis Results</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Detected Disease:</span>
+                  <span className="text-lg font-bold">
+                    {prediction.disease}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Confidence:</span>
+                  <span className={`font-bold ${
+                    prediction.confidence >= 0.7 ? 'text-green-500' :
+                    prediction.confidence >= 0.5 ? 'text-yellow-500' : 'text-red-500'
+                  }`}>
+                    {(prediction.confidence * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
 
-          {prediction && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Disease Detection Result</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className={`p-4 rounded-lg ${
-                  prediction.label.includes('healthy') 
-                    ? 'bg-green-50 text-green-800' 
-                    : 'bg-red-50 text-red-800'
-                }`}>
-                  <p className="text-lg font-semibold">
-                    {prediction.label.includes('healthy') ? (
-                      <span>Healthy Plant</span>
-                    ) : (
-                      <span>Detected Disease: {prediction.label}</span>
-                    )}
-                  </p>
+              <div className="space-y-4 mt-4">
+                <div>
+                  <h3 className="font-medium mb-2">Description:</h3>
+                  <p className="text-sm text-gray-600">{prediction.description}</p>
                 </div>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Info className="h-5 w-5 text-gray-500" />
-                    <p className="text-sm text-gray-500">
-                      Confidence Score: {(prediction.score * 100).toFixed(2)}%
-                    </p>
-                  </div>
-                  
-                  {!prediction.label.includes('healthy') && (
-                    <div className="mt-4 space-y-4">
-                      {getDiseaseInfo(prediction.label) && (
-                        <>
-                          <div>
-                            <p className="text-sm font-medium text-gray-700">Description:</p>
-                            <p className="text-sm text-gray-600 mt-1">
-                              {getDiseaseInfo(prediction.label)?.description}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-700">Treatment:</p>
-                            <p className="text-sm text-gray-600 mt-1">
-                              {getDiseaseInfo(prediction.label)?.treatment}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-700">Prevention:</p>
-                            <p className="text-sm text-gray-600 mt-1">
-                              {getDiseaseInfo(prediction.label)?.prevention}
-                            </p>
-                          </div>
-                        </>
-                      )}
-                      <div>
-                        <p className="text-sm font-medium text-gray-700">Recommended Actions:</p>
-                        <ul className="mt-2 text-sm text-gray-600 list-disc list-inside">
-                          <li>Isolate the affected plant</li>
-                          <li>Remove infected leaves</li>
-                          <li>Apply appropriate treatment</li>
-                          <li>Monitor plant health regularly</li>
-                        </ul>
-                      </div>
-                    </div>
-                  )}
+                <div>
+                  <h3 className="font-medium mb-2">Treatment:</h3>
+                  <p className="text-sm text-gray-600">{prediction.treatment}</p>
                 </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+                <div>
+                  <h3 className="font-medium mb-2">Prevention:</h3>
+                  <p className="text-sm text-gray-600">{prediction.prevention}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

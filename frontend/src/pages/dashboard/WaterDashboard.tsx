@@ -1,83 +1,145 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
-import { AlertTriangle, Droplet, ThermometerIcon, Activity } from "lucide-react";
-import WaterQualityChart from "../../components/charts/WaterQualityChart";
-import { useESPSensorData } from "../../hooks/useSensor";
-
-const config = {
-  ph: { label: "pH Level", color: "#22c55e" },
-  turbidity: { label: "Turbidity", color: "#f97316" },
-  temperature: { label: "Temperature", color: "#8b5cf6" },
-};
+import { Droplet, Thermometer, AlertCircle, Info } from "lucide-react";
 
 const WaterDashboard = () => {
-  const { sensorData, isLoading, error } = useESPSensorData();
-  // console.log(sensorData);
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Water Quality Dashboard</h1>
-        <div className="flex items-center gap-2 text-yellow-600 bg-yellow-50 px-4 py-2 rounded-lg">
-          <AlertTriangle className="h-5 w-5" />
-          <span>1 Quality Alert</span>
+        <h1 className="text-3xl font-bold">Water Quality Monitoring</h1>
+        <div className="flex items-center gap-2 text-primary bg-primary-50 px-4 py-2 rounded-lg">
+          <Droplet className="h-5 w-5" />
+          <span>Coming Soon</span>
         </div>
       </div>
 
-      {/* Key Indicators */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* pH Level Card */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">pH Level</CardTitle>
-            <Droplet className="h-4 w-4 text-primary" />
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Droplet className="h-5 w-5" />
+              pH Level
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {isLoading ? "Loading..." : sensorData?.ph ?? "N/A"}
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold">Coming Soon</div>
+              <p className="text-sm text-gray-500 mt-2">Water pH monitoring will be available soon</p>
+              <div className="mt-4 text-left text-sm text-gray-600">
+                <p className="font-medium">Features:</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Continuous pH level monitoring</li>
+                  <li>pH trend analysis</li>
+                  <li>Automated pH adjustment alerts</li>
+                  <li>Optimal pH range tracking</li>
+                </ul>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">Normal range: 6.5-8.5</p>
           </CardContent>
         </Card>
 
-        {/* Turbidity Card */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Turbidity</CardTitle>
-            <Activity className="h-4 w-4 text-secondary" />
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Thermometer className="h-5 w-5" />
+              Turbidity
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {isLoading ? "Loading..." : sensorData?.tds ?? "N/A"} NTU
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold">Coming Soon</div>
+              <p className="text-sm text-gray-500 mt-2">Water turbidity monitoring will be available soon</p>
+              <div className="mt-4 text-left text-sm text-gray-600">
+                <p className="font-medium">Features:</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Real-time turbidity measurement</li>
+                  <li>Water clarity analysis</li>
+                  <li>Contamination detection</li>
+                  <li>Filtration system alerts</li>
+                </ul>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">Below threshold: 5 NTU</p>
           </CardContent>
         </Card>
 
-        {/* Temperature Card */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Temperature</CardTitle>
-            <ThermometerIcon className="h-4 w-4 text-accent" />
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Thermometer className="h-5 w-5" />
+              Temperature
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {isLoading 
-                ? "Loading..." 
-                : sensorData?.temperature 
-                  ? `${sensorData.temperature}°C` 
-                  : "N/A"}
+            <div className="text-center p-4">
+              <div className="text-2xl font-bold">Coming Soon</div>
+              <p className="text-sm text-gray-500 mt-2">Water temperature monitoring will be available soon</p>
+              <div className="mt-4 text-left text-sm text-gray-600">
+                <p className="font-medium">Features:</p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li>Continuous temperature tracking</li>
+                  <li>Temperature trend analysis</li>
+                  <li>Optimal temperature alerts</li>
+                  <li>Seasonal temperature patterns</li>
+                </ul>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">Optimal range: 20-30°C</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Water Quality Trends Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Water Quality Trends</CardTitle>
+          <CardTitle>About Water Monitoring</CardTitle>
         </CardHeader>
         <CardContent>
-          <WaterQualityChart config={config} />
+          <div className="space-y-6">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-yellow-500 mt-1" />
+              <div>
+                <p className="font-medium">Feature Coming Soon</p>
+                <p className="text-sm text-gray-500">
+                  We are working on integrating IoT sensors for real-time water quality monitoring. This will include:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                  <li>Real-time pH level monitoring</li>
+                  <li>Turbidity measurement</li>
+                  <li>Water temperature tracking</li>
+                  <li>Water quality alerts</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <Info className="h-5 w-5 text-blue-500 mt-1" />
+              <div>
+                <p className="font-medium">Technology Stack</p>
+                <p className="text-sm text-gray-500">
+                  Our water monitoring system will utilize:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                  <li>High-precision water quality sensors</li>
+                  <li>ESP8266 microcontrollers</li>
+                  <li>Real-time data processing</li>
+                  <li>Cloud-based analytics platform</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <Info className="h-5 w-5 text-green-500 mt-1" />
+              <div>
+                <p className="font-medium">Benefits</p>
+                <p className="text-sm text-gray-500">
+                  The water monitoring system will help farmers:
+                </p>
+                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                  <li>Ensure optimal water quality</li>
+                  <li>Prevent crop damage from poor water</li>
+                  <li>Optimize irrigation schedules</li>
+                  <li>Reduce water waste</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
